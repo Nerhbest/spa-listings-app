@@ -22,7 +22,6 @@ class CreateListingsTable extends Migration
             $table->text("body");
             $table->unsignedInteger("price");
             $table->string("place");
-            $table->boolean("live")->default(0);
             $table->decimal("lat",  10, 6);
             $table->decimal("lng", 10, 6);
             $table->timestamps();

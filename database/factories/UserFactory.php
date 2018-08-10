@@ -26,7 +26,7 @@ $factory->define(App\User::class, function (Faker $faker) {
 $factory->define(\App\Listing::class, function (Faker $faker)
 {
     return [
-      "title" => $faker->sentence(rand(1,4)),
+      "title" => $faker->sentence(rand(1,3)),
       "body" => $faker->text(),
       "price" => rand(100,50000),
       "created_at" => $faker->dateTimeBetween('-30 days', 'now')

@@ -10,6 +10,7 @@ use App\Repositories\ListingRepository;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use JD\Cloudder\Facades\Cloudder;
 use Mockery\Exception;
 
 class ListingService
@@ -60,10 +61,11 @@ class ListingService
 
             if($this->needUploadPhotos($request)){
                 foreach ($request["photos"] as $image){
-                    $savedImagePath = $this->imageUploadService->saveImage($image);
+                    $savedImageData = $this->imageUploadService->saveImageInCloudinary($image);
                     ListingImage::create([
                         "listing_id" => $listing->id,
-                        "img_path" => "listings/{$savedImagePath}"
+                        "url" => $savedImageData["url"],
+                        "public_id" => $savedImageData["public_id"]
                     ]);
                 }
             }
@@ -115,9 +117,9 @@ class ListingService
             $images = $listing->images;
             $listing->delete();
             foreach($images as $image) {
-                $imagePath = $image->getImagePath();
+                $publicId = $image->getPublicId();
                 $image->delete();
-                $this->removePhoto($imagePath);
+                Cloudder::destroy($publicId);
             }
 
             DB::commit();
@@ -155,13 +157,21 @@ class ListingService
         return $request->has('searchTerm') ? true : false;
     }
 
+    public function destroyFromCloudinary($publicId)
+    {
+        return Cloudder::destroy($publicId);
+    }
+
     public function uploadPhoto($listing,$image)
     {
-        $savedImagePath = $this->imageUploadService->saveImage($image);
+        $savedImageData = $this->imageUploadService->saveImageInCloudinary($image);
+
         $listingImage = ListingImage::create([
             "listing_id" => $listing->id,
-            "img_path" => "listings/{$savedImagePath}"
+            "public_id" => $savedImageData["public_id"],
+            "url" => $savedImageData["url"]
         ]);
+
         return $listingImage;
     }
 

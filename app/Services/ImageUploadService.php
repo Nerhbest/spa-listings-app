@@ -1,7 +1,9 @@
 <?php
 namespace App\Services;
 
+use App\Http\Requests\UploadPhotoRequest;
 use Illuminate\Http\UploadedFile;
+use JD\Cloudder\Facades\Cloudder;
 
 class ImageUploadService
 {
@@ -26,6 +28,17 @@ class ImageUploadService
         $this->fileSystem->putFileForce($fullPath, file_get_contents($image->getRealPath()));
 
         return $subPath;
+    }
+
+    public function saveImageInCloudinary(UploadedFile $image)
+    {
+        $response = Cloudder::upload($image->getRealPath());
+        $result = $response->getResult();
+
+        return [
+          "public_id" => $result["public_id"],
+          "url" => $result["url"]
+        ];
     }
 
     private function expandPath(string $path): string

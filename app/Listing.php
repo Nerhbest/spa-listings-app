@@ -89,10 +89,12 @@ class Listing extends Model
     public function getMainPhotoAttribute()
     {
             if(count($this->images) == 0)
-                return asset("storage/listings/default.jpg");
+                return 'https://res.cloudinary.com/dfrtlxtvz/image/upload/v1533865972/default.png';
             else
-                return $this->images[0]->img_path;
+                return $this->images[0]->getUrl();
     }
+
+
 
     public function getCreatedAtAttribute($key) {
         return Carbon::createFromFormat('Y-m-d H:i:s', $key)->diffForHumans();

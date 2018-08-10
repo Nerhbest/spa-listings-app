@@ -28,6 +28,17 @@ class ListingImage extends Model
         return public_path("storage/{$this->getOriginal('img_path')}");
     }
 
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    public function getPublicId()
+    {
+        return $this->public_id;
+    }
+
+
 
 
 

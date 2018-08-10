@@ -17,8 +17,8 @@ class FavoritesTable extends Migration
             $table->unsignedInteger("user_id");
             $table->unsignedInteger("listing_id");
 
-            $table->foreign("user_id")->references('id')->on("users")->onDelete("CASCADE");
-            $table->foreign("listing_id")->references('id')->on('listings')->onDelete("CASCADE");
+            $table->foreign("user_id")->references('id')->on("users")->onDelete("cascade");
+            $table->foreign("listing_id")->references('id')->on('listings')->onDelete("cascade");
         });
     }
 

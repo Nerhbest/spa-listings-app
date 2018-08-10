@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Listing;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class FavoriteController extends Controller
 {
@@ -17,8 +18,16 @@ class FavoriteController extends Controller
     public function toggle(Listing $listing)
     {
         $user = auth()->user();
-        $changes = $user->favoriteListings()->toggle([$listing->id]);
-        return $this->sendResponse($changes);
+        if(Gate::allows('toggle-favorite', $listing)){
+            $changes = $user->favoriteListings()->toggle([$listing->id]);
+            return $this->sendResponse($changes);
+        }
+
+        return response()->json([
+            'errors' => [
+                'msg' => 'Вы не можете добавить в избранное собственное объявление'
+            ]
+        ],422);
     }
 
     public function sendResponse($changes)

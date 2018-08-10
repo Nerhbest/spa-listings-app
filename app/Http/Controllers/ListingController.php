@@ -147,20 +147,24 @@ class ListingController extends Controller
     {
         $listing = Listing::findOrFail($request["listing_id"]);
         $listingImage = ListingImage::findOrFail($request["id"]);
-        $img_path = $listingImage->getImagePath();
+        $publicId = $listingImage->getPublicId();
 
         if(Gate::allows('remove-photo', $listing)){
-            return DB::transaction(function() use ($listingImage, $img_path) {
-                try{
-                    $listingImage->delete();
-                    $this->listingService->removePhoto($img_path);
-                   return response()->json([
-                       "msg" => "Фото успешно удалено"
-                   ],200);
-                }catch (\Exception $e){
-                    DB::rollBack();
-                }
-            });
+            DB::beginTransaction();
+
+            try{
+                $listingImage->delete();
+                $this->listingService->destroyFromCloudinary($publicId);
+
+                DB::commit();
+
+                return response()->json([
+                    "msg" => "Фото успешно удалено"
+                ],200);
+
+            }catch (\Exception $e){
+                DB::rollBack();
+            }
         }
     }
 }

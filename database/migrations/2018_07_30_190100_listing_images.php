@@ -16,7 +16,9 @@ class ListingImages extends Migration
         Schema::create("listing_images", function(Blueprint $table) {
             $table->increments("id");
             $table->unsignedInteger("listing_id");
-            $table->string("img_path");
+            $table->string("url");
+            $table->string("public_id");
+            //$table->string("img_path");
         });
     }
 

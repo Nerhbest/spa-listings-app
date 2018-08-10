@@ -35,6 +35,10 @@ class AppServiceProvider extends ServiceProvider
         {
             return $user->id == $listing->user_id;
         });
+        Gate::define('toggle-favorite', function($user,$listing)
+        {
+            return $user->id != $listing->user_id;
+        });
     }
 
     /**

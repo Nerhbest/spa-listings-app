@@ -12,9 +12,18 @@
 * Backend Source Code : /app
 * Frontend Source Code: /client/src
 
+### Features
+  * JWT Авторизация
+  * Загрузка Изображений
+  * Текстовый поиск
+  * Интеграция с Yandex Maps
+  * Реализация Crud
+
 ### Структура Frontend
   * Api Сервисы : client/src/services
   * Vuex Store  : client/src/store
   * Vuex Константы: client/src/constants
   * Роуты       : client/src/router/index.js
   * Компоненты  : client/src/compomnents
+
+

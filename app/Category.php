@@ -39,6 +39,11 @@ class Category extends Model
         });
     }
 
+    public function childsIds()
+    {
+        return array_merge([$this->id], $this->descendants->pluck('id')->toArray());
+    }
+
     /**
     * Relations
     */

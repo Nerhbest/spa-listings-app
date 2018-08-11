@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Category;
 use App\Listing;
 use App\User;
 use Bosnadev\Repositories\Eloquent\Repository;
@@ -37,8 +38,9 @@ class ListingRepository  extends Repository
 
         if($request->has("city"))
             $builder->where('city_id', $request["city"]);
-        if($request->has('category'))
-            $builder->where('category_id', $request["category"]);
+        if($request->has('category')){
+            $builder->where('category_id', $request['category']);
+        }
 
         $listingsPaginator = $builder->paginate(6);
 
